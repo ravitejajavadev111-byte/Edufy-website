@@ -376,7 +376,7 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
           {features.map((f, i) => (
             <div
               key={f.title}
-              ref={(el) => (cardRefs.current[i] = el)}
+              ref={(el) => { cardRefs.current[i] = el }}
               className="story-module-card"
               style={{
                 position: "absolute", top: "50%", left: "50%", width: "280px",
