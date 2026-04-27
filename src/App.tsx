@@ -3,9 +3,10 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 // ============================================================
-// FINAL IMAGE PATHS
+// IMAGE PATHS
 // ============================================================
 const IMAGES = {
   hero: "/assets/hero.png",
@@ -14,26 +15,35 @@ const IMAGES = {
   parentComplaints: "/assets/parent-complaints.png",
   parentHome: "/assets/parent-home.png",
   parentReports: "/assets/parent-reports.png",
-  founder: "/assets/founder.png"
+  founder: "/assets/founder.png",
 };
 
 // ============================================================
 // REUSABLE IMAGE BLOCK
 // ============================================================
-const ImageBlock: React.FC<{ src: string; alt: string; className?: string; style?: React.CSSProperties; containerStyle?: React.CSSProperties }> = ({
-  src,
-  alt,
-  className = "",
-  style,
-  containerStyle,
-}) => (
+const ImageBlock: React.FC<{
+  src: string;
+  alt: string;
+  className?: string;
+  containerStyle?: React.CSSProperties;
+  imgStyle?: React.CSSProperties;
+}> = ({ src, alt, className = "", containerStyle, imgStyle }) => (
   <div className={`image-block ${className}`} style={containerStyle}>
-    <img src={src} alt={alt} loading="lazy" decoding="async" style={style} />
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      style={{ width: "100%", height: "100%", display: "block", ...imgStyle }}
+      onError={(e) => {
+        (e.target as HTMLImageElement).style.display = "none";
+      }}
+    />
   </div>
 );
 
 // ============================================================
-// FEATURES (UPDATED FOR CAROUSEL & GRID)
+// FEATURES
 // ============================================================
 type Feature = {
   title: string;
@@ -50,7 +60,7 @@ const FEATURES: Feature[] = [
   { title: "Parent Portal", desc: "Stay connected with your child's progress.", img: IMAGES.parentHome, color: "#F472B6" },
 ];
 
-const CAROUSEL_FEATURES = FEATURES;   // now all 5 modules fit the 3D ring
+const CAROUSEL_FEATURES = FEATURES;
 
 // ============================================================
 // UTILITY HOOKS
@@ -74,9 +84,18 @@ function useMousePosition() {
 function useReveal(threshold = 0.12) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    // Already visible on mount?
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setVisible(true);
+      return;
+    }
+
     const obs = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
       { threshold },
@@ -84,6 +103,7 @@ function useReveal(threshold = 0.12) {
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold]);
+
   return { ref, visible };
 }
 
@@ -125,7 +145,29 @@ function StatCounter({ end, suffix = "+" }: { end: number; suffix?: string }) {
 }
 
 // ============================================================
-// STORY‑DRIVEN 3D MODULES (IMAGE CROPPING FIXED)
+// ERROR BOUNDARY
+// ============================================================
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode; fallback: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
+// ============================================================
+// STORY‑DRIVEN 3D MODULES
 // ============================================================
 const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ features, enabled }) => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -141,7 +183,7 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
 
   const featuresRef = useRef(features);
   const numCardsRef = useRef(features.length);
-  const radiusRef = useRef(300); // changed from 400 to 300
+  const radiusRef = useRef(400);
   featuresRef.current = features;
   numCardsRef.current = features.length;
 
@@ -197,6 +239,7 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
       const radius = radiusRef.current;
       const feat = featuresRef.current;
 
+      // Initial positions
       cardRefs.current.forEach((card, i) => {
         if (!card) return;
         const baseAngle = (360 / numCards) * i;
@@ -248,15 +291,15 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
       };
 
       gsap.to(carousel, {
-        rotationY: -300, // changed from -420 to -300
+        rotationY: -420,
         ease: "power1.inOut",
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          fastScrollEnd: true,
           end: () => `+=${window.innerHeight * 2.5}`,
           pin: true,
           pinSpacing: true,
+          pinReparent: true,
           scrub: 1.2,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -272,14 +315,14 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
     return () => {
       mountedRef.current = false;
       ctx.revert();
-      ScrollTrigger.getAll().forEach((st) => {
+      ScrollTrigger.getAll().forEach((st: any) => {
         if (st.trigger === section) st.kill();
       });
     };
   }, [enabled]);
 
   const getInitialTransform = (i: number) =>
-    `rotateY(${(360 / features.length) * i}deg) translateZ(${300}px) scale(0.7)`;
+    `rotateY(${(360 / features.length) * i}deg) translateZ(${400}px) scale(0.7)`;
 
   return (
     <section
@@ -289,8 +332,7 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
         zIndex: 15,
         overflow: "hidden",
         background: "linear-gradient(180deg, #0A0A14 0%, #050510 50%, #020208 100%)",
-        visibility: enabled ? "visible" : "hidden",
-        minHeight: enabled ? "100vh" : "0",
+        minHeight: "100vh",
       }}
     >
       <div style={{ textAlign: "center", padding: "60px 2rem 0", position: "relative", zIndex: 16 }}>
@@ -317,7 +359,7 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
         }}>Smart Attendance</div>
         <div ref={centralSubRef} style={{
           fontSize: "1.1rem", color: "#CBD5E1", maxWidth: "400px", margin: "0 auto",
-          fontStyle: "normal", // removed italic
+          fontStyle: "italic",
         }}>Mark per section, instant parent notifications.</div>
       </div>
 
@@ -337,22 +379,18 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
               ref={(el) => (cardRefs.current[i] = el)}
               className="story-module-card"
               style={{
-                position: "absolute", top: "50%", left: "50%", width: "340px", // increased from 280px
-                marginLeft: "-170px", marginTop: "-220px", borderRadius: "28px", overflow: "hidden",
+                position: "absolute", top: "50%", left: "50%", width: "280px",
+                marginLeft: "-140px", marginTop: "-190px",
+                borderRadius: "28px", overflow: "hidden",
                 background: "rgba(18,18,40,0.75)", backdropFilter: "blur(20px)",
                 border: "1px solid rgba(255,255,255,0.06)", boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
-                willChange: "transform, opacity", userSelect: "none",
+                willChange: "transform", userSelect: "none",
                 transition: "border-color 0.5s ease, box-shadow 0.5s ease",
-                transform: getInitialTransform(i), opacity: 0.3,
+                transform: getInitialTransform(i),
+                opacity: 0.3,
               }}
             >
-              <div style={{
-                width: "100%",
-                aspectRatio: "16/10",
-                minHeight: "220px",
-                overflow: "hidden",
-                background: "#0A0A1A"
-              }}>
+              <div style={{ width: "100%", aspectRatio: "16/10", overflow: "hidden", background: "#0A0A1A" }}>
                 <img
                   src={f.img}
                   alt={f.title}
@@ -361,8 +399,12 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
                   style={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "top",
+                    objectFit: "contain",
+                    background: "#0A0A1A",
+                    padding: "10px",
+                  }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
                   }}
                 />
               </div>
@@ -386,7 +428,7 @@ const StoryModules: React.FC<{ features: Feature[]; enabled: boolean }> = ({ fea
 };
 
 // ============================================================
-// FALLBACK GRID (IMAGE FIX)
+// FALLBACK GRID
 // ============================================================
 function FeatureGridFallback({ enabled }: { enabled: boolean }) {
   return (
@@ -409,13 +451,7 @@ function FeatureGridFallback({ enabled }: { enabled: boolean }) {
             background: "rgba(255,255,255,0.025)", borderRadius: "20px", overflow: "hidden",
             border: "1px solid rgba(255,255,255,0.06)",
           }}>
-            <div style={{
-              width: "100%",
-              aspectRatio: "16/10",
-              minHeight: "220px",
-              overflow: "hidden",
-              background: "#0A0A1A"
-            }}>
+            <div style={{ width: "100%", aspectRatio: "16/10", overflow: "hidden", background: "#0A0A1A" }}>
               <img
                 src={f.img}
                 alt={f.title}
@@ -424,8 +460,12 @@ function FeatureGridFallback({ enabled }: { enabled: boolean }) {
                 style={{
                   width: "100%",
                   height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "top",
+                  objectFit: "contain",
+                  background: "#0A0A1A",
+                  padding: "12px",
+                }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
                 }}
               />
             </div>
@@ -441,7 +481,7 @@ function FeatureGridFallback({ enabled }: { enabled: boolean }) {
 }
 
 // ============================================================
-// PROBLEM SECTION (unchanged)
+// PROBLEM SECTION
 // ============================================================
 function ProblemSection() {
   return (
@@ -469,7 +509,7 @@ function ProblemSection() {
 }
 
 // ============================================================
-// TRANSPORT SECTION (unchanged)
+// TRANSPORT SECTION
 // ============================================================
 function TransportSection() {
   const [dot, setDot] = useState({ x: 20, y: 60 });
@@ -554,14 +594,14 @@ function TransportSection() {
 }
 
 // ============================================================
-// FOUNDER SECTION (UPDATED)
+// FOUNDER SECTION
 // ============================================================
 function FounderSection() {
   return (
     <section style={{
       padding: "100px 2rem",
-      background: "linear-gradient(180deg, #06060E, #0A0A14)",
-      borderTop: "1px solid rgba(255,255,255,0.05)"
+      background: "linear-gradient(180deg, #0A0A14 0%, #06060E 100%)",
+      borderTop: "1px solid rgba(255,255,255,0.04)",
     }}>
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "center", gap: "48px",
@@ -580,6 +620,7 @@ function FounderSection() {
               loading="lazy"
               decoding="async"
               style={{ width: "100%", display: "block", objectFit: "cover" }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
             />
           </div>
         </div>
@@ -597,7 +638,7 @@ function FounderSection() {
 }
 
 // ============================================================
-// CTA (unchanged)
+// CTA
 // ============================================================
 function CTASection() {
   const [email, setEmail] = useState("");
@@ -652,7 +693,7 @@ function CTASection() {
 }
 
 // ============================================================
-// NAVBAR (UPDATED)
+// NAVBAR
 // ============================================================
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -666,9 +707,9 @@ function Navbar() {
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, height: "68px", padding: "0 2.5rem",
       display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 1000,
-      background: scrolled ? "rgba(6,6,14,0.6)" : "transparent",
+      background: scrolled ? "rgba(6,6,14,0.75)" : "transparent",
       backdropFilter: scrolled ? "blur(30px)" : "none",
-      borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
+      borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
       transition: "all 0.5s ease",
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -690,7 +731,7 @@ function Navbar() {
 }
 
 // ============================================================
-// HERO (WITH HERO IMAGE + LAYOUT + GLOW)
+// HERO
 // ============================================================
 function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -714,15 +755,10 @@ function Hero() {
       </div>
 
       <div className="hero-container" style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "48px",
-        maxWidth: "1200px",
-        width: "100%",
-        flexWrap: "wrap",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        gap: "48px", maxWidth: "1200px", width: "100%", flexWrap: "wrap",
       }}>
-        {/* Text column */}
+        {/* Text */}
         <div style={{ flex: "1 1 400px", textAlign: "left" }}>
           <div className="hero-title" style={{ marginBottom: "24px" }}>
             <span style={{
@@ -760,25 +796,19 @@ function Hero() {
           </div>
         </div>
 
-        {/* Image column with glow */}
+        {/* Hero image */}
         <div style={{ flex: "1 1 500px", display: "flex", justifyContent: "center", position: "relative" }}>
           <div style={{ position: "relative" }}>
             <div style={{
-              position: "absolute",
-              bottom: "-20px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "80%",
-              height: "40%",
-              background: "radial-gradient(circle, rgba(99,102,241,0.25), transparent)",
-              filter: "blur(60px)",
-              zIndex: -1
+              position: "absolute", bottom: "-20px", left: "50%", transform: "translateX(-50%)",
+              width: "80%", height: "40%", background: "radial-gradient(circle, rgba(99,102,241,0.25), transparent)",
+              filter: "blur(60px)", zIndex: -1,
             }} />
             <div
               className="hero-image-wrapper"
               style={{
                 maxWidth: "720px",
-                transform: "perspective(1200px) rotateY(-5deg)",
+                transform: "perspective(1200px) rotateY(-8deg)",
                 boxShadow: "0 40px 120px rgba(0,0,0,0.6)",
                 borderRadius: "20px",
                 overflow: "hidden",
@@ -790,6 +820,7 @@ function Hero() {
                 loading="lazy"
                 decoding="async"
                 style={{ width: "100%", display: "block", borderRadius: "20px" }}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
               />
             </div>
           </div>
@@ -800,7 +831,7 @@ function Hero() {
 }
 
 // ============================================================
-// STATS BAR (unchanged)
+// STATS BAR
 // ============================================================
 function StatsBar() {
   return (
@@ -831,7 +862,7 @@ function StatsBar() {
 }
 
 // ============================================================
-// FOOTER (unchanged)
+// FOOTER
 // ============================================================
 function Footer() {
   return (
@@ -854,7 +885,7 @@ function Footer() {
 }
 
 // ============================================================
-// GLOBAL STYLES (HERO IMAGE FLOAT + RESPONSIVENESS)
+// GLOBAL STYLES
 // ============================================================
 function GlobalStyles() {
   return (
@@ -862,7 +893,7 @@ function GlobalStyles() {
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { scroll-behavior: smooth; }
+      html { } /* removed scroll-behavior */
 
       body {
         background: #06060E;
@@ -879,7 +910,6 @@ function GlobalStyles() {
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
       }
 
-      /* Image block utility */
       .image-block {
         position: relative;
         border-radius: 20px;
@@ -892,24 +922,21 @@ function GlobalStyles() {
         display: block;
       }
 
-      /* Hero image floating animation */
       .hero-image-wrapper {
         animation: heroFloat 6s ease-in-out infinite;
       }
       @keyframes heroFloat {
-        0% { transform: perspective(1200px) rotateY(-5deg) translateY(0px); }
-        50% { transform: perspective(1200px) rotateY(-5deg) translateY(-12px); }
-        100% { transform: perspective(1200px) rotateY(-5deg) translateY(0px); }
+        0% { transform: perspective(1200px) rotateY(-8deg) translateY(0px); }
+        50% { transform: perspective(1200px) rotateY(-8deg) translateY(-12px); }
+        100% { transform: perspective(1200px) rotateY(-8deg) translateY(0px); }
       }
 
-      /* Founder image styling */
       .founder-image img {
         width: 100%;
         border-radius: 20px;
         object-fit: cover;
       }
 
-      /* Responsive hero stacking */
       @media (max-width: 768px) {
         .hero-container {
           flex-direction: column;
@@ -934,16 +961,16 @@ function GlobalStyles() {
 }
 
 // ============================================================
-// ROOT COMPONENT
+// APP
 // ============================================================
 export default function App() {
   const [is3D, setIs3D] = useState(false);
   useEffect(() => {
-    const mql = window.matchMedia("(min-width: 1100px) and (pointer: fine)"); // changed from 901px to 1100px
-    setIs3D(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setIs3D(e.matches);
-    mql.addEventListener("change", handler);
-    return () => mql.removeEventListener("change", handler);
+    const mql = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
+    const check = () => setIs3D(mql.matches);
+    check();
+    mql.addEventListener("change", check);
+    return () => mql.removeEventListener("change", check);
   }, []);
 
   return (
@@ -953,7 +980,9 @@ export default function App() {
       <Hero />
       <StatsBar />
       <ProblemSection />
-      <StoryModules features={CAROUSEL_FEATURES} enabled={is3D} />
+      <ErrorBoundary fallback={<FeatureGridFallback enabled={true} />}>
+        <StoryModules features={CAROUSEL_FEATURES} enabled={is3D} />
+      </ErrorBoundary>
       <FeatureGridFallback enabled={!is3D} />
       <TransportSection />
       <FounderSection />
