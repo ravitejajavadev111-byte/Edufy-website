@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback, useLayoutEffect, ReactNode } from "react";
+import { useState, useEffect, useRef, useCallback, useLayoutEffect } from "react";
+import type { ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -631,7 +632,7 @@ const features = [
   { title: "Support", desc: "Help and communication", color: "#E24B4A", image: "/images/support.png" }
 ];
 
-function ModuleCarousel({ triggerRef }: { triggerRef: React.RefObject<HTMLDivElement> }) {
+function ModuleCarousel(triggerRef?: React.RefObject<HTMLDivElement | null>;) {
   const carousel3dRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -747,7 +748,7 @@ function ModuleCarousel({ triggerRef }: { triggerRef: React.RefObject<HTMLDivEle
           {features.map((feat, i) => (
             <div
               key={i}
-              ref={(el) => (cardRefs.current[i] = el)}
+              ref={(el) => {cardRefs.current[i] = el;}}
               className="carousel-card"
             >
               <img
