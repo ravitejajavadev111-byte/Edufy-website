@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
-   EDUFY — Side‑by‑side 3D Carousel (Pixel quality)
+   EDUFY — Production SaaS Landing (Pixel‑quality, 3D carousel)
    ============================================================ */
 
 const CSS = `
@@ -51,7 +51,7 @@ input{font-family:var(--fb)}
 a{text-decoration:none;color:inherit}
 ::selection{background:rgba(32,85,244,0.2)}
 
-/* ── CURSOR (blue) ── */
+/* ── CURSOR ── */
 #cd{position:fixed;width:7px;height:7px;border-radius:50%;
   background:var(--ind);pointer-events:none;z-index:99999;
   transform:translate(-50%,-50%)}
@@ -146,7 +146,6 @@ a{text-decoration:none;color:inherit}
   -webkit-mask-image:radial-gradient(ellipse 82% 82% at 50% 50%,black 25%,transparent);
   mask-image:radial-gradient(ellipse 82% 82% at 50% 50%,black 25%,transparent)}
 
-.hl{position:relative;z-index:2}
 .hpill{display:inline-flex;align-items:center;gap:8px;
   font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
   color:var(--ind);border:1px solid rgba(32,85,244,.28);
@@ -177,6 +176,11 @@ a{text-decoration:none;color:inherit}
   opacity:0;transition:opacity .28s}
 .bph:hover{transform:translateY(-3px);box-shadow:0 14px 52px rgba(32,85,244,.5)}
 .bph:hover::before{opacity:1}
+.bps{font-size:16px;font-weight:600;color:var(--t0);
+  background:transparent;border:1.5px solid var(--b2);
+  border-radius:11px;padding:15px 36px;
+  transition:border-color .24s var(--ex),background .24s var(--ex)}
+.bps:hover{border-color:var(--ind-l);background:rgba(32,85,244,.04)}
 .htr{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:36px;flex-wrap:wrap;
   animation:fadeUp .9s var(--ex) .46s both}
 .htb{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--t3)}
@@ -184,14 +188,19 @@ a{text-decoration:none;color:inherit}
   background:rgba(14,158,107,.1);border:1px solid rgba(14,158,107,.24);
   display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-/* limited seats badge */
 .limited{font-size:13px;font-weight:600;color:var(--amber);
   background:rgba(224,122,16,.08);border:1px solid rgba(224,122,16,.2);
   border-radius:100px;padding:4px 16px;margin-top:16px;display:inline-block}
 
-/* ── MARQUEE ── */
-.mw{border-top:1px solid var(--b0);border-bottom:1px solid var(--b0);
-  padding:17px 0;overflow:hidden;position:relative}
+/* ── TRUST SECTION ── */
+.trust-sec{padding:48px 60px;border-top:1px solid var(--b0);border-bottom:1px solid var(--b0)}
+.trust-inner{max-width:1260px;margin:0 auto}
+.trust-stats{display:flex;flex-wrap:wrap;gap:28px 56px;justify-content:center;margin-bottom:20px}
+.trust-stat{text-align:center}
+.trust-stat-val{font-family:var(--fd);font-size:2.4rem;font-weight:400;letter-spacing:-.03em;color:var(--t0)}
+.trust-stat-lbl{font-size:13px;color:var(--t3);margin-top:2px}
+
+.mw{overflow:hidden;position:relative}
 .mw::before,.mw::after{content:'';position:absolute;top:0;bottom:0;width:160px;
   z-index:2;pointer-events:none}
 .mw::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
@@ -203,6 +212,17 @@ a{text-decoration:none;color:inherit}
 .mico{font-size:16px}
 .mlb{font-size:15.5px;font-weight:500;color:var(--t3);transition:color .2s}
 .mi:hover .mlb{color:var(--t1)}
+
+/* ── PROBLEM SECTION ── */
+.problem-sec{padding:100px 60px;background:var(--bg)}
+.problem-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:1260px;margin:0 auto}
+@media(min-width:768px){.problem-grid{grid-template-columns:repeat(4,1fr)}}
+.problem-card{background:var(--s1);border:1.5px solid var(--b1);border-radius:16px;
+  padding:28px 24px;transition:border-color .35s,transform .35s}
+.problem-card:hover{border-color:rgba(224,75,74,.3);transform:translateY(-4px)}
+.problem-icon{font-size:28px;margin-bottom:14px}
+.problem-title{font-family:var(--fd);font-size:18px;font-weight:400;letter-spacing:-.02em;margin-bottom:8px;color:var(--t0)}
+.problem-desc{font-size:13.5px;color:var(--t2);line-height:1.6}
 
 /* ── SECTION ── */
 .sec{padding:100px 60px}
@@ -218,7 +238,7 @@ a{text-decoration:none;color:inherit}
 
 /* ── TRANSPORT CARD ── */
 .bcc{background:var(--s1);border:1.5px solid var(--b1);
-  border-radius:20px;padding:18px;position:relative;height: 560px;overflow:hidden;
+  border-radius:20px;padding:18px;position:relative;overflow:hidden;
   transition:border-color .35s,background .35s}
 .bcc::before{content:'';position:absolute;inset:0;border-radius:20px;
   background:radial-gradient(580px circle at var(--mx,50%) var(--my,50%),rgba(32,85,244,.04),transparent 55%);
@@ -232,7 +252,6 @@ a{text-decoration:none;color:inherit}
   letter-spacing:-.02em;margin-bottom:10px;line-height:1.18;color:var(--t0)}
 .bd{font-size:13.5px;color:var(--t2);line-height:1.65}
 
-/* map */
 .mm{flex:1;margin-top:16px;background:rgba(0,0,14,.03);
   border:1px solid var(--b1);border-radius:14px;position:relative;overflow:hidden;min-height:0px}
 .mgl{position:absolute;inset:0;
@@ -262,13 +281,6 @@ a{text-decoration:none;color:inherit}
 }
 
 /* ── 3D CAROUSEL (right column) ── */
-.carousel-wrap{
-  height:100%;
-  position:relative;
-  overflow:visible;
-  width: 100%;
-  /* perspective is applied inline or via class */
-}
 .carousel-perspective{
   width:100%;
   height:100%;
@@ -295,7 +307,6 @@ a{text-decoration:none;color:inherit}
   transform-origin:center center;
   will-change:transform,opacity;
   background:var(--s2);
-
 }
 .carousel-card img{
   display:block;
@@ -303,7 +314,6 @@ a{text-decoration:none;color:inherit}
   height:100%;
   object-fit:cover;
 }
-/* fallback placeholder */
 .card-placeholder{
   display:none;
   width:100%;
@@ -321,7 +331,6 @@ a{text-decoration:none;color:inherit}
   border-radius:18px;
   border:2px solid var(--b1);
 }
-/* Center overlay text */
 .carousel-overlay{
   position:absolute;
   top:50%;
@@ -346,42 +355,7 @@ a{text-decoration:none;color:inherit}
   margin:0 auto;
 }
 
-/* ── ENHANCED FEATURES ── */
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start}
-.fst{position:sticky;top:96px}
-.fl{display:flex;flex-direction:column}
-.fi{display:flex;gap:24px;padding:28px 0;border-bottom:1.5px solid var(--b1);
-  transition:transform .35s var(--ex),border-color .35s,background .35s;
-  background:transparent;border-radius:12px;padding:24px;margin-bottom:4px}
-.fi:hover{background:var(--s2);border-color:var(--b2);transform:translateX(6px)}
-.fi:last-child{border-bottom:none}
-.fico{width:48px;height:48px;border-radius:14px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;font-size:22px;
-  background:var(--s2);border:1.5px solid var(--b1);
-  transition:background .3s,border-color .3s,color .3s;color:var(--t2)}
-.fi:hover .fico{background:var(--ind);border-color:var(--ind);color:#fff}
-.fn{font-family:var(--fd);font-size:20px;font-weight:400;
-  letter-spacing:-.02em;margin-bottom:7px;color:var(--t0)}
-.fd2{font-size:14.5px;color:var(--t2);line-height:1.66}
-
-/* phone mockup (unchanged) */
-.phone-mock{position:relative;width:240px;height:480px;border-radius:36px;
-  background:var(--bg);border:3px solid var(--b1);
-  box-shadow:0 30px 60px rgba(0,0,0,.1);overflow:hidden;margin:0 auto;
-  animation:float 6s ease-in-out infinite}
-.pm-top{height:28px;display:flex;align-items:center;justify-content:center;gap:8px;
-  padding-top:8px}
-.pm-notch{width:80px;height:18px;background:rgba(13,15,18,.1);border-radius:9px}
-.pm-screen{background:var(--s2);margin:8px 12px;border-radius:20px;padding:16px;
-  display:flex;flex-direction:column;gap:12px;height:calc(100% - 52px);overflow:hidden}
-.pm-card{background:var(--bg);border:1px solid var(--b0);border-radius:12px;
-  padding:12px;display:flex;align-items:center;gap:10px;font-size:13px;
-  transition:transform .3s}
-.pm-card:hover{transform:scale(1.02)}
-.pm-avatar{width:32px;height:32px;border-radius:50%;background:var(--ind-d);
-  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;color:var(--ind)}
-
-/* ── FOUNDER ── */
+/* ── ENHANCED FEATURES (old) ── */
 .founder-quote{background:var(--bg);border:1.5px solid var(--b1);border-radius:14px;
   padding:20px;font-family:var(--fd);font-style:italic;font-size:20px;color:var(--t1);
   line-height:1.6}
@@ -429,22 +403,24 @@ footer{border-top:1px solid var(--b0);padding:38px 60px;
 .ftlk{font-size:13.5px;color:var(--t3);transition:color .2s}
 .ftlk:hover{color:var(--t2)}
 
-/* ── RESPONSIVE ── */
 @media(max-width:1060px){
   #nav{padding:0 24px}
   .nls{display:none}
   .hero{padding:108px 24px 60px}
   .hi{max-width:100%}
   .sec{padding:70px 24px}
-  .fg{grid-template-columns:1fr;gap:40px}
-  .fst{position:static}
+  .problem-sec{padding:70px 24px}
+  .problem-grid{grid-template-columns:1fr 1fr}
+  .trust-sec{padding:32px 24px}
   .mod-grid{grid-template-columns:1fr}
   footer{padding:28px 24px}
   .csec{padding:80px 24px}
 }
 `;
 
-// ─── HOOKS ────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// HOOKS & HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
 function useInView(threshold = 0.09) {
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
@@ -490,7 +466,6 @@ function useCount(end: number, ms = 2300, dec = 0) {
   return [ref, n] as const;
 }
 
-// ─── REVEAL WRAPPER ───────────────────────────────────────────────────────────
 function Reveal({
   children, delay = 0, dir = "up", className = "", style = {}
 }: {
@@ -518,7 +493,9 @@ function Reveal({
   );
 }
 
-// ─── CURSOR ───────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// CURSOR
+// ═══════════════════════════════════════════════════════════════════════════
 function Cursor() {
   const dot = useRef<HTMLDivElement>(null);
   const ring = useRef<HTMLDivElement>(null);
@@ -558,7 +535,9 @@ function Cursor() {
   );
 }
 
-// ─── NAVBAR ───────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// NAVBAR
+// ═══════════════════════════════════════════════════════════════════════════
 function Nav() {
   const [sc, setSc] = useState(false);
   useEffect(() => {
@@ -580,7 +559,7 @@ function Nav() {
         <span className="nn">Edufy</span>
       </div>
       <div className="nls">
-        {["Product", "Features", "Pricing", "Security", "Blog"].map(l => (
+        {["Product", "Features", "About", "Blog"].map(l => (
           <button key={l} className="nla">{l}</button>
         ))}
       </div>
@@ -592,7 +571,122 @@ function Nav() {
   );
 }
 
-// ─── BUS MAP (unchanged) ─────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// HERO — outcome‑driven messaging
+// ═══════════════════════════════════════════════════════════════════════════
+function Hero() {
+  return (
+    <section className="hero">
+      <div className="orb oa" /><div className="orb ob" /><div className="orb oc" />
+      <div className="dg" />
+      <div className="hi">
+        <div className="hpill"><div className="hpd" />Trusted by 500+ schools across India</div>
+        <h1 className="hh">
+          Your school,<br />
+          <span className="gr">running smoothly</span>
+        </h1>
+        <p className="hs">
+          Stop juggling spreadsheets, chasing attendance records, and answering parent calls about bus locations. Edufy handles operations — so you can focus on education.
+        </p>
+        <div className="hbt">
+          <button className="bph">Start free trial</button>
+          <button className="bps">See how it works</button>
+        </div>
+        <div className="limited">Only 50 schools can join this month — seats filling fast</div>
+        <div className="htr">
+          {["No credit card needed", "Free for 30 days", "Cancel anytime"].map(t => (
+            <div key={t} className="htb">
+              <div className="htc">
+                <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                  <path d="M1.5 4L3 5.5L6.5 2" stroke="#0E9E6B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              {t}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TRUST SECTION — social proof + marquee
+// ═══════════════════════════════════════════════════════════════════════════
+function TrustSection() {
+  const items = [
+    { i: "🎓", n: "Academic Management" }, { i: "📋", n: "Smart Attendance" },
+    { i: "💰", n: "Fee Collection" }, { i: "📊", n: "Exams & Results" },
+    { i: "🚌", n: "Live Transport" }, { i: "📢", n: "Parent Notices" },
+    { i: "💬", n: "Two-way Messaging" }, { i: "📱", n: "Mobile App" },
+    { i: "🔐", n: "Role-based Access" }, { i: "📁", n: "Report Cards" },
+    { i: "📆", n: "Timetables" }, { i: "🏫", n: "Multi-campus" },
+  ];
+  const all = [...items, ...items];
+  return (
+    <section className="trust-sec">
+      <div className="trust-inner">
+        <div className="trust-stats">
+          <div className="trust-stat"><div className="trust-stat-val">500+</div><div className="trust-stat-lbl">Schools onboarded</div></div>
+          <div className="trust-stat"><div className="trust-stat-val">98%</div><div className="trust-stat-lbl">Retention rate</div></div>
+          <div className="trust-stat"><div className="trust-stat-val">2M+</div><div className="trust-stat-lbl">Student records managed</div></div>
+          <div className="trust-stat"><div className="trust-stat-val">4.9</div><div className="trust-stat-lbl">Average rating</div></div>
+        </div>
+      </div>
+      <div className="mw">
+        <div className="mt">
+          {all.map((m, i) => (
+            <div key={i} className="mi">
+              <span className="mico">{m.i}</span>
+              <span className="mlb">{m.n}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PROBLEM SECTION — relatable school pain points
+// ═══════════════════════════════════════════════════════════════════════════
+const painPoints = [
+  { icon: "📋", title: "Attendance chaos", desc: "Teachers spend 45+ minutes every morning marking registers across three different systems." },
+  { icon: "📞", title: "Constant parent calls", desc: "\"Where is the bus?\" — the question you answer 15 times a day instead of running your school." },
+  { icon: "📊", title: "Scattered fee records", desc: "Fee dues tracked in Excel, receipts on WhatsApp, and reconciliations that never match." },
+  { icon: "📄", title: "Report card bottlenecks", desc: "Two weeks to generate report cards because data lives in five different places." },
+];
+
+function ProblemSection() {
+  return (
+    <section className="problem-sec">
+      <div className="sin">
+        <Reveal>
+          <div className="slb"><div className="slbl" />The problem</div>
+          <h2 className="sh">Running a school is hard.<br /><em>Your software shouldn't make it harder.</em></h2>
+          <p className="ss" style={{ marginBottom: 44 }}>
+            Most school management tools were built a decade ago. They're slow, disconnected, and designed for IT departments — not for principals, teachers, and parents.
+          </p>
+        </Reveal>
+        <div className="problem-grid">
+          {painPoints.map((p, i) => (
+            <Reveal key={p.title} delay={i * 0.08} dir="s">
+              <div className="problem-card">
+                <div className="problem-icon">{p.icon}</div>
+                <div className="problem-title">{p.title}</div>
+                <div className="problem-desc">{p.desc}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// BUS MAP (unchanged)
+// ═══════════════════════════════════════════════════════════════════════════
 function BusMap() {
   const pts = [
     { left: "8%", top: "24%" }, { left: "27%", top: "15%" },
@@ -624,34 +718,70 @@ function BusMap() {
   );
 }
 
-// ─── FIXED 3D CAROUSEL (inside right column) ─────────────────────────────────
-const features = [
-  { title: "Home", desc: "Overview of school operations", color: "#2055F4", image: "/images/home.png" },
-  { title: "Attendance", desc: "Track student presence", color: "#E07A10", image: "/images/attendance.png" },
-  { title: "Reports", desc: "Marks, exams and performance", color: "#36A6F0", image: "/images/reports.png" },
-  { title: "Support", desc: "Help and communication", color: "#E24B4A", image: "/images/support.png" }
+// ═══════════════════════════════════════════════════════════════════════════
+// ENHANCED PLATFORM SECTION — 3D carousel (replaces old Features)
+// ═══════════════════════════════════════════════════════════════════════════
+const carouselItems = [
+  {
+    title: "Attendance",
+    subtitle: "One‑tap check‑in",
+    desc: "Mark attendance in seconds, send automated alerts, and view live dashboards.",
+    color: "#E07A10",
+    image: "/assets/parent-attendance.png",
+  },
+  {
+    title: "Fees",
+    subtitle: "Frictionless collection",
+    desc: "Track payments, send reminders, and reconcile accounts automatically.",
+    color: "#0E9E6B",
+    image: "/assets/admin-fees.png",
+  },
+  {
+    title: "Exams",
+    subtitle: "Streamlined assessments",
+    desc: "Schedule exams, record marks, and publish results with detailed analytics.",
+    color: "#36A6F0",
+    image: "/assets/parent-home.png",   // or "/assets/parent-reports.png" if you prefer
+  },
+  {
+    title: "Reports",
+    subtitle: "Beautiful report cards",
+    desc: "Auto‑generate report cards that parents can access instantly on any device.",
+    color: "#E24B4A",
+    image: "/assets/parent-reports.png",
+  },
 ];
 
-function ModuleCarousel(triggerRef?: React.RefObject<HTMLDivElement | null>;) {
+function PlatformSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const carousel3dRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const overlayRef = useRef<HTMLDivElement>(null);
   const overlayTitleRef = useRef<HTMLHeadingElement>(null);
   const overlayDescRef = useRef<HTMLParagraphElement>(null);
 
-  const numCards = features.length;
+  const mm = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+  }, []);
+
+  const numCards = carouselItems.length;
   const step = 360 / numCards;
   const radius = 380;
   const SMOOTHING = 0.08;
 
-  useEffect(() => {
-    const trigger = triggerRef.current;
-    if (!trigger) return;
-
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+    const grid = gridRef.current;
+    const carousel = carousel3dRef.current;
+    if (!section || !grid || !carousel) return;
     const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
     if (cards.length === 0) return;
 
-    // Initial positioning (replace string transform with GSAP properties)
+    // Initial positioning with GSAP properties
     cards.forEach((card, i) => {
       gsap.set(card, {
         rotationY: i * step,
@@ -662,7 +792,6 @@ function ModuleCarousel(triggerRef?: React.RefObject<HTMLDivElement | null>;) {
       });
     });
 
-    // Quick setters for maximum performance – no string concatenation
     const setters = cards.map((card) => ({
       rotationY: gsap.quickSetter(card, 'rotationY', 'deg'),
       z: gsap.quickSetter(card, 'z', 'px'),
@@ -670,35 +799,27 @@ function ModuleCarousel(triggerRef?: React.RefObject<HTMLDivElement | null>;) {
       opacity: gsap.quickSetter(card, 'opacity'),
     }));
 
-    // Smooth interpolation state – NO React setState inside animation
     let current = 0;
     let target = 0;
     const rotation = { value: 0 };
 
     const updateCards = () => {
-      // Loop through all cards and set transforms based on smoothed `current`
       for (let i = 0; i < numCards; i++) {
         let angle = i * step - current;
-        // Normalize to [-180, 180]
         while (angle > 180) angle -= 360;
         while (angle < -180) angle += 360;
         const absAngle = Math.abs(angle);
-        // Scale: 1 when front, 0.65 when at 90°
-        const scale = 1 - (absAngle / 90) * 0.35;
-        const clampedScale = Math.max(0.65, Math.min(1, scale));
-        // Opacity: 1 when front, 0.2 when at 90°
-        const opacity = 1 - (absAngle / 90) * 0.8;
-        const clampedOpacity = Math.max(0.2, Math.min(1, opacity));
+        const scale = Math.max(0.65, Math.min(1, 1 - (absAngle / 90) * 0.35));
+        const opacity = Math.max(0.2, Math.min(1, 1 - (absAngle / 90) * 0.8));
 
         setters[i].rotationY(i * step - current);
         setters[i].z(radius);
-        setters[i].scale(clampedScale);
-        setters[i].opacity(clampedOpacity);
-        // z-index based on frontness (lower absAngle = higher index)
+        setters[i].scale(scale);
+        setters[i].opacity(opacity);
         cards[i].style.zIndex = String(Math.round(100 - absAngle));
       }
 
-      // Update overlay text (front card) without React state
+      // Update overlay text for the front card
       let frontIdx = 0;
       let minAngle = 360;
       for (let i = 0; i < numCards; i++) {
@@ -712,10 +833,10 @@ function ModuleCarousel(triggerRef?: React.RefObject<HTMLDivElement | null>;) {
         }
       }
       if (overlayTitleRef.current && overlayDescRef.current && overlayRef.current) {
-        const feat = features[frontIdx];
-        overlayTitleRef.current.textContent = feat.title;
-        overlayDescRef.current.textContent = feat.desc;
-        overlayRef.current.style.color = feat.color;
+        const item = carouselItems[frontIdx];
+        overlayTitleRef.current.textContent = item.title;
+        overlayDescRef.current.textContent = item.desc;
+        overlayRef.current.style.color = item.color;
       }
     };
 
@@ -723,247 +844,92 @@ function ModuleCarousel(triggerRef?: React.RefObject<HTMLDivElement | null>;) {
       gsap.to(rotation, {
         value: -360,
         ease: 'none',
-      scrollTrigger: {
-        trigger,
-        start: "top center",
-        end: "bottom top",
-        scrub: 1.2,
-      },
+        scrollTrigger: {
+          trigger: grid,
+          start: 'top top+=80',
+          end: '+=2000',
+          scrub: 1.5,
+          pin: true,
+        },
         onUpdate: () => {
-          // Smooth interpolation: target chases raw rotation value
           target = rotation.value;
           current += (target - current) * SMOOTHING;
           updateCards();
         },
       });
-    }, trigger);
+    }, section);
 
     return () => ctx.revert();
-  }, [triggerRef]);
+  }, [numCards, step, radius]);
 
   return (
-    <div className="carousel-wrap">
-      <div className="carousel-perspective" style={{ perspective: "1500px" }}>
-        <div ref={carousel3dRef} className="carousel-3d">
-          {features.map((feat, i) => (
-            <div
-              key={i}
-              ref={(el) => {cardRefs.current[i] = el;}}
-              className="carousel-card"
-            >
-              <img
-                src={feat.image}
-                alt={feat.title}
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
-              <div className="card-placeholder">
-                <div className="phone-mock-small" />
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* Dynamic overlay with refs – updated directly in animation */}
-        <div className="carousel-overlay" ref={overlayRef} style={{ color: features[0].color }}>
-          <h3 ref={overlayTitleRef}>{features[0].title}</h3>
-          <p ref={overlayDescRef}>{features[0].desc}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── HERO ─────────────────────────────────────────────────────────────────────
-function Hero() {
-  return (
-    <section className="hero">
-      <div className="orb oa" /><div className="orb ob" /><div className="orb oc" />
-      <div className="dg" />
-      <div className="hi">
-        <div className="hpill"><div className="hpd" />Introducing Edufy</div>
-        <h1 className="hh">
-          Run your school with<br />
-          one <span className="gr">unified platform</span>
-        </h1>
-        <p className="hs">
-          Edufy replaces scattered spreadsheets, WhatsApp groups, and disconnected software with one intelligent system — built for the way schools actually work.
-        </p>
-        <div className="hbt">
-          <button className="bph">Start free trial</button>
-        </div>
-        <div className="limited">Only 50 schools can join this month — seats filling fast</div>
-        <div className="htr">
-          {["No credit card required", "Free for 30 days", "GDPR compliant"].map(t => (
-            <div key={t} className="htb">
-              <div className="htc">
-                <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                  <path d="M1.5 4L3 5.5L6.5 2" stroke="#0E9E6B" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              {t}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── MARQUEE ─────────────────────────────────────────────────────────────────
-function Marquee() {
-  const items = [
-    { i: "🎓", n: "Academic Management" }, { i: "📋", n: "Smart Attendance" },
-    { i: "💰", n: "Fee Collection" }, { i: "📊", n: "Exams & Results" },
-    { i: "🚌", n: "Live Transport" }, { i: "📢", n: "Parent Notices" },
-    { i: "💬", n: "Two-way Messaging" }, { i: "📱", n: "Mobile App" },
-    { i: "🔐", n: "Role-based Access" }, { i: "📁", n: "Report Cards" },
-    { i: "📆", n: "Timetables" }, { i: "🏫", n: "Multi-campus" },
-  ];
-  const all = [...items, ...items];
-  return (
-    <div className="mw">
-      <div className="mt">
-        {all.map((m, i) => (
-          <div key={i} className="mi">
-            <span className="mico">{m.i}</span>
-            <span className="mlb">{m.n}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── PLATFORM MODULES (side‑by‑side) ─────────────────────────────────────────
-function PlatformSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const mm = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
-    el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
-  }, []);
-
-  return (
-    <section
-      ref={sectionRef}
-      className="sec"
-      style={{
-        overflow: "visible",
-        minHeight: "160vh"   // 🔥 gives scroll room
-      }}
-    >
+    <section ref={sectionRef} className="sec" style={{ overflow: "visible" }}>
       <div className="sin">
-
-        {/* HEADER stays same */}
         <Reveal>
           <div className="slb">
-            <div className="slbl" />Platform modules
+            <div className="slbl" />The solution
           </div>
           <h2 className="sh">
-            Everything in <strong>one place</strong>,<br />
-            <em>nothing scattered</em>
+            Everything your school needs,<br /><em>in one place</em>
           </h2>
           <p className="ss" style={{ marginBottom: 0 }}>
-            Eight tightly integrated modules that speak to each other — your data stays consistent, private, and always yours.
+            No more switching between apps, spreadsheets, and WhatsApp. Every module talks to the others — your data stays accurate and your staff stays productive.
           </p>
         </Reveal>
 
-        {/* GRID */}
-        <div
-          className="mod-grid"
-          style={{
-            position: "sticky",
-            top: "80px",   // aligns below navbar
-          }}
-        >
-
-          {/* ✅ LEFT — FIXED */}
-          <div
-            className="bcc"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              height: "560px",
-            }}
-            onMouseMove={mm}
-          >
+        <div ref={gridRef} className="mod-grid" style={{ marginTop: 48 }}>
+          {/* LEFT – Live transport tracking */}
+          <div className="bcc" style={{ display: "flex", flexDirection: "column", height: "440px" }} onMouseMove={mm}>
             <Reveal delay={0}>
               <>
                 <div className="btag tj">Live Feature</div>
-                <div className="bt">Real-time Transport Tracking</div>
+                <div className="bt">Real‑time Transport Tracking</div>
                 <div className="bd">
-                  Parents see exactly where the school bus is. No calls, no anxiety — live location and ETA, always.
+                  Parents see exactly where the school bus is. No more anxious phone calls — just live location and accurate ETA.
                 </div>
               </>
             </Reveal>
-
             <BusMap />
           </div>
 
-          {/* ✅ RIGHT — FIXED */}
-          <div style={{ height: "560px", width: "100%" }}>
-            <Reveal delay={0.1}>
-              <ModuleCarousel triggerRef={sectionRef} />
-            </Reveal>
+          {/* RIGHT – 3D Carousel */}
+          <div style={{ height: "440px", width: "100%", position: "relative" }}>
+            <div className="carousel-perspective" style={{ perspective: "1500px", height: "100%" }}>
+              <div ref={carousel3dRef} className="carousel-3d" style={{ height: "100%" }}>
+                {carouselItems.map((item, i) => (
+                  <div
+                    key={i}
+                    ref={(el) => { cardRefs.current[i] = el; }}
+                    className="carousel-card"
+                    style={{ background: item.color + "15" }} // subtle tint
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                    <div className="card-placeholder">
+                      <div className="phone-mock-small" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {/* Center overlay text */}
+              <div className="carousel-overlay" ref={overlayRef} style={{ color: carouselItems[0].color }}>
+                <h3 ref={overlayTitleRef}>{carouselItems[0].title}</h3>
+                <p ref={overlayDescRef}>{carouselItems[0].desc}</p>
+              </div>
+            </div>
           </div>
-
         </div>
       </div>
     </section>
   );
 }
 
-// ─── ENHANCED FEATURES ────────────────────────────────────────────────────────
-function Features() {
-    const feats = [
-      { icon: "🎓", name: "Academic Structure", desc: "Students, sections..." },
-      { icon: "📋", name: "Smart Attendance", desc: "Teachers mark..." },
-      { icon: "💰", name: "Fee Management", desc: "Track dues..." },
-      { icon: "📊", name: "Exams & Report Cards", desc: "Generate reports..." },
-      { icon: "📢", name: "Targeted Notices", desc: "Send announcements..." },
-      { icon: "💬", name: "Parent Messaging", desc: "Two-way communication..." },
-    ];
-
-   return (
-     <section className="sec" style={{ background: "var(--s2)", borderTop: "1px solid var(--b0)", borderBottom: "1px solid var(--b0)" }}>
-       <div className="sin">
-         <div className="fg">
-           <div className="fst">
-             <Reveal>
-               <div className="slb"><div className="slbl" />Why Edufy</div>
-               <h2 className="sh">Built for<br /><em>how schools</em><br /><strong>actually work</strong></h2>
-               <p className="ss" style={{ marginBottom: 36 }}>
-                 Every feature came from conversations with principals, teachers, and parents — not guesswork.
-               </p>
-               <button className="bc bph" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                 See every feature in action
-                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                   <path d="M1 6H11M11 6L7 2M11 6L7 10" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                 </svg>
-               </button>
-             </Reveal>
-           </div>
-           <div className="fl">
-             {feats.map((f, i) => (
-               <Reveal key={f.name} delay={i * 0.07} dir="r">
-                 <div className="fi">
-                   <div className="fico">{f.icon}</div>
-                   <div>
-                     <div className="fn">{f.name}</div>
-                     <div className="fd2">{f.desc}</div>
-                   </div>
-                 </div>
-               </Reveal>
-             ))}
-           </div>
-         </div>
-       </div>
-     </section>
-   );
- }
-
-// ─── FOUNDER ──────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// FOUNDER
+// ═══════════════════════════════════════════════════════════════════════════
 function Founder() {
   return (
     <section className="sec" style={{ background: "var(--s1)", borderTop: "1px solid var(--b0)" }}>
@@ -974,7 +940,7 @@ function Founder() {
               👨‍💼
             </div>
             <div className="founder-quote" style={{ position: "absolute", bottom: -20, left: 20, right: 20 }}>
-              "We built Edufy after seeing a principal manage 1,200 students on three Excel sheets."
+              "We built Edufy after watching a principal run 1,200 students on three separate Excel sheets and a WhatsApp group."
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16, fontFamily: "var(--fb)", fontStyle: "normal" }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--ind-d)", border: "1px solid var(--b1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>👨‍💻</div>
                 <div>
@@ -986,16 +952,18 @@ function Founder() {
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="slb"><div className="slbl" />Our Story</div>
+          <div className="slb"><div className="slbl" />Our story</div>
           <h2 className="sh">Built by educators,<br /><em>for educators</em></h2>
-          <p className="ss" style={{ fontSize: 17 }}>We left EdTech giants to solve the unsexy but critical problem of school infrastructure. Every pixel of Edufy is shaped by conversations with principals, teachers, and parents.</p>
+          <p className="ss" style={{ fontSize: 17 }}>We left established EdTech companies to solve the unglamorous but critical problem of school operations. Every feature in Edufy comes from real conversations with principals, teachers, and parents — not a product roadmap written in a boardroom.</p>
         </Reveal>
       </div>
     </section>
   );
 }
 
-// ─── CTA ─────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// CTA
+// ═══════════════════════════════════════════════════════════════════════════
 function CTA() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
@@ -1005,11 +973,11 @@ function CTA() {
       <div className="dg" style={{ maskImage: "radial-gradient(ellipse 65% 75% at 50% 50%,black,transparent)" }} />
       <Reveal style={{ position: "relative" }}>
         <h2 className="ch2">
-          Ready to transform<br /><em>your school?</em>
+          Ready to give your school<br /><em>the platform it deserves?</em>
         </h2>
         <p className="csub">
-          Join 200+ schools already running on Edufy.<br />
-          Start free — no credit card, no commitment.
+          Join 500+ schools that have simplified their operations.<br />
+          Start your free trial — no credit card, no commitment.
         </p>
         {!sent ? (
           <>
@@ -1018,10 +986,10 @@ function CTA() {
                 value={email} onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && email && setSent(true)} />
               <button className="bctal" onClick={() => email && setSent(true)}>
-                Get started free
+                Start free trial
               </button>
             </div>
-            <div className="limited" style={{ marginTop: 18 }}>Only 50 seats left for this month</div>
+            <div className="limited" style={{ marginTop: 18 }}>Only 50 seats available this month</div>
           </>
         ) : (
           <div className="smsg">
@@ -1034,7 +1002,7 @@ function CTA() {
           </div>
         )}
         <div className="ctrust">
-          {["No credit card required", "Free for 30 days", "Cancel anytime"].map(t => (
+          {["No credit card needed", "Free for 30 days", "Cancel anytime"].map(t => (
             <div key={t} className="htb">
               <div className="htc">
                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
@@ -1050,7 +1018,9 @@ function CTA() {
   );
 }
 
-// ─── FOOTER ───────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// FOOTER
+// ═══════════════════════════════════════════════════════════════════════════
 function Footer() {
   return (
     <footer>
@@ -1077,7 +1047,9 @@ function Footer() {
   );
 }
 
-// ─── ROOT ────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// ROOT — logical narrative flow
+// ═══════════════════════════════════════════════════════════════════════════
 export default function App() {
   return (
     <>
@@ -1086,9 +1058,9 @@ export default function App() {
       <Cursor />
       <Nav />
       <Hero />
-      <Marquee />
+      <TrustSection />
+      <ProblemSection />
       <PlatformSection />
-      <Features />
       <Founder />
       <CTA />
       <Footer />
