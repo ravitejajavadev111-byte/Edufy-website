@@ -414,6 +414,7 @@ a{text-decoration:none;color:inherit}
 .module-card{position:absolute;width:280px;height:400px;
   left:50%;top:50%;margin-left:-140px;margin-top:-200px;
   border-radius:var(--r-xl);background:var(--bg-pure);
+   transition: box-shadow 0.25s ease, transform 0.2s ease;
   box-shadow:0 32px 64px -12px rgba(10,10,22,.2),0 0 0 1px rgba(10,10,22,.06);
   transform-origin:center center;will-change:transform,opacity;
   overflow:hidden;display:flex;flex-direction:column}
@@ -431,7 +432,15 @@ a{text-decoration:none;color:inherit}
 .module-card .glow-ring{position:absolute;inset:0;border-radius:var(--r-xl);
   pointer-events:none;box-shadow:inset 0 0 0 1.5px rgba(26,76,245,.22);
   opacity:0;transition:opacity .4s}
-
+/* Front card highlighting */
+.module-card.front {
+  box-shadow: 0 32px 64px -12px rgba(10,10,22,0.4), 0 0 0 2px var(--ind);
+}
+.module-card.front .glow-ring {
+  opacity: 1 !important;
+  box-shadow: inset 0 0 0 2px var(--ind), 0 0 24px rgba(26,76,245,0.6);
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+}
 .carousel-indicator{display:flex;justify-content:center;gap:7px;margin-top:24px}
 .carousel-dot{width:6px;height:6px;border-radius:50%;background:var(--b2);
   transition:background .3s,width .3s var(--ex);cursor:pointer}
@@ -1188,7 +1197,7 @@ function Modules3D() {
 
   const numCards = MODULES.length;
   const step = 360 / numCards;
-  const radius = 480;
+  const radius = 520; // increased for better spacing
 
   useLayoutEffect(() => {
     if (isMobile) return;
@@ -1198,12 +1207,12 @@ function Modules3D() {
     const cards = cardRefs.current.filter(Boolean) as HTMLDivElement[];
     if (cards.length !== numCards) return;
 
+    // Initial positions
     cards.forEach((card, i) => {
       card.style.transform = `rotateY(${i * step}deg) translateZ(${radius}px)`;
     });
 
     const rotateObj = { value: 0 };
-
     const ctx = gsap.context(() => {
       gsap.to(rotateObj, {
         value: -360,
@@ -1212,7 +1221,7 @@ function Modules3D() {
           trigger: section,
           start: "top+=600 center",
           end: "+=300%",
-          scrub: 1.2,
+          scrub: 1.5,        // smoother
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
@@ -1230,16 +1239,36 @@ function Modules3D() {
             if (diff < -180) diff += 360;
             const absDiff = Math.abs(diff);
             const frontness = 1 - Math.min(absDiff / 90, 1);
-            const scale = 0.7 + frontness * 0.3;
-            const opacity = 0.38 + frontness * 0.62;
+            const scale = 0.6 + frontness * 0.45;
+            const opacity = 0.3 + frontness * 0.7;
             const zIndex = Math.round(1000 + frontness * 1000);
             card.style.transform = `rotateY(${i * step}deg) translateZ(${radius}px) scale(${scale})`;
             card.style.opacity = String(opacity);
             card.style.zIndex = String(zIndex);
-            if (frontness > maxFrontness) { maxFrontness = frontness; maxIdx = i; }
+
             const glowRing = card.querySelector<HTMLElement>(".glow-ring");
-            if (glowRing) glowRing.style.opacity = String(frontness * 0.65);
+            if (glowRing) glowRing.style.opacity = String(frontness * 0.9);
+
+            // Track the card with highest frontness
+            if (frontness > maxFrontness) {
+              maxFrontness = frontness;
+              maxIdx = i;
+            }
           }
+
+          // Get the frontmost card and decide if it's really front-facing (<25°)
+          const frontCard = cards[maxIdx];
+          let diffFront = (maxIdx * step - current) % 360;
+          if (diffFront > 180) diffFront -= 360;
+          if (diffFront < -180) diffFront += 360;
+          const isExactlyFront = Math.abs(diffFront) <= 25;
+
+          // Remove front class from all, then add only if exactly front
+          cards.forEach(card => card.classList.remove("front"));
+          if (isExactlyFront) {
+            frontCard.classList.add("front");
+          }
+
           if (maxIdx !== activeIdxRef.current) {
             activeIdxRef.current = maxIdx;
             setActiveIdx(maxIdx);
@@ -1251,6 +1280,7 @@ function Modules3D() {
   }, [isMobile, numCards, step, radius]);
 
   if (isMobile) {
+    // mobile fallback (unchanged)
     return (
       <section className="sec" style={{ overflow: "visible", background: "var(--bg)" }}>
         <div className="sin">
@@ -1282,7 +1312,7 @@ function Modules3D() {
           <p className="ss" style={{ marginBottom: 0 }}>Scroll to explore all modules →</p>
         </Reveal>
         <div style={{ marginTop: 44 }}>
-          <div className="carousel-stage">
+          <div className="carousel-stage" style={{ perspective: "2400px" }}>
             <div ref={carouselRotatorRef} className="carousel-rotator">
               {MODULES.map((mod, i) => (
                 <div
@@ -1291,12 +1321,14 @@ function Modules3D() {
                   className="module-card"
                 >
                   <div className="card-header">
-                    <div className="card-badge"
+                    <div
+                      className="card-badge"
                       style={{
                         color: mod.accent,
                         background: `${mod.accent}14`,
-                        border: `1px solid ${mod.accent}30`
-                      }}>
+                        border: `1px solid ${mod.accent}30`,
+                      }}
+                    >
                       {mod.badge}
                     </div>
                     <h3>{mod.title}</h3>
