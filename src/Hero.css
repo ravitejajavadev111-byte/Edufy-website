@@ -1,0 +1,320 @@
+/* ============================================================
+   HERO.CSS – Premium SaaS Ecosystem Hero
+   ============================================================ */
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 135deg;
+}
+
+:root {
+  --color-brand-blue: #2563EB;
+  --color-brand-navy: #0F2B66;
+  --color-brand-blue-rgb: 37, 99, 235;
+  --color-brand-navy-rgb: 15, 43, 102;
+  --color-slate-500: #64748B;
+  --color-slate-400: #94A3B8;
+
+  --font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ── The pinning timeline workspace ──────────────────── */
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300vh; /* gives GSAP 300vh to scroll through */
+  background-color: #ffffff;
+}
+
+/* Sticky positioning – eliminates whitespace pop at end of scroll */
+.hero-inner {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 2;
+  overflow: hidden; /* strict containment */
+}
+
+/* Full‑bleed background scene – stays inside inner container */
+.hero-master-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── Main content grid ─────────────────────────────── */
+.hero-grid {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  padding: 0 8%;
+  display: flex;
+  align-items: center;
+}
+
+/* Left column – elevated above everything */
+.hero-left {
+  position: relative;
+  z-index: 20;
+  flex: 0 0 45%;
+  max-width: 480px;
+  background: transparent;
+}
+
+/* Right visual canvas – absolute, decoupled from flex */
+.hero-right {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 620px;
+  height: 620px;
+  z-index: 10;
+}
+
+/* ── Left content stack (premium micro‑layout) ────── */
+.hero-content-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.eyebrow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  background: rgba(var(--color-brand-blue-rgb), 0.04);
+  border: 1px solid rgba(var(--color-brand-blue-rgb), 0.1);
+  width: fit-content;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-brand-blue);
+}
+.eyebrow-badge svg { color: var(--color-brand-blue); }
+
+.hero-headline {
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #0F2B66;
+  margin: 0;
+}
+.headline-line {
+  display: block;
+}
+.headline-line--blue {
+  color: #2563EB;
+}
+
+.supporting-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #64748B;
+  margin: 0;
+  max-width: 460px;
+}
+
+.benefit-row {
+  display: flex;
+  gap: 24px;
+  margin: 12px 0;
+  border-top: 1px solid rgba(15, 43, 102, 0.06);
+  border-bottom: 1px solid rgba(15, 43, 102, 0.06);
+  padding: 16px 0;
+}
+.benefit-item { display: flex; align-items: flex-start; gap: 10px; max-width: 180px; }
+.benefit-item__icon-circle {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: #2563EB;
+}
+.benefit-item__text { display: flex; flex-direction: column; }
+.benefit-item__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F2B66;
+}
+.benefit-item__desc { font-size: 12px; color: var(--color-slate-400); line-height: 1.3; margin-top: 2px; }
+
+.trust-line {
+  font-size: 13px; font-weight: 500; color: var(--color-slate-400);
+  letter-spacing: 0.02em;
+}
+
+.cta-group { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.cta-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 32px; min-height: 52px; min-width: 200px;
+  background: var(--color-brand-blue); color: #fff; border: none; border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(var(--color-brand-blue-rgb), 0.3);
+  font-family: var(--font-family); font-size: 16px; font-weight: 600;
+  line-height: 1; cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.cta-primary:hover { box-shadow: 0 8px 24px rgba(var(--color-brand-blue-rgb), 0.4); transform: scale(1.02); }
+.cta-primary__arrow { transition: transform 0.2s; }
+.cta-primary:hover .cta-primary__arrow { transform: translateX(4px); }
+
+.cta-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 24px; min-height: 52px;
+  background: transparent; color: var(--color-brand-navy);
+  border: 1.5px solid rgba(var(--color-brand-navy-rgb), 0.15); border-radius: 12px;
+  font-family: var(--font-family); font-size: 16px; font-weight: 500;
+  line-height: 1; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.cta-secondary:hover { border-color: var(--color-brand-blue); background: rgba(var(--color-brand-blue-rgb), 0.03); }
+.cta-secondary__play-icon { font-size: 14px; }
+.cta-micro-trust { width: 100%; font-size: 12px; color: var(--color-slate-400); }
+
+/* ── Orbit engine ──────────────────────────────────── */
+.orbit-workspace {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Rings hidden – artwork already contains the circle */
+.orbit-rings-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+  display: none;
+}
+
+/* Zero‑size rotation anchor */
+.orbit-nodes-group {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 15;
+}
+
+/* Individual chip – radius calibrated to exactly 232px */
+.orbit-node {
+  position: absolute;
+  top: -26px;
+  left: -26px;
+  width: 52px;
+  height: 52px;
+  transform: rotate(var(--module-angle)) translateX(232px);
+  display: flex;
+  align-items: center;
+}
+
+/* Balancing engine – keeps icon & text perfectly horizontal */
+.orbit-icon-badge,
+.feature-card-content {
+  transform: rotate(calc(-1 * var(--module-angle) - var(--orbit-rotation, 0deg))) !important;
+  will-change: transform;
+}
+
+/* Premium icon chip */
+.orbit-icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid rgba(15, 43, 102, 0.08);
+  box-shadow: 0 8px 24px rgba(15, 43, 102, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  z-index: 25;
+}
+
+.orbit-node--active .orbit-icon-badge {
+  transform: rotate(calc(-1 * var(--module-angle) - var(--orbit-rotation, 0deg))) scale(1.15) !important;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--badge-bg), 0 16px 32px rgba(15, 43, 102, 0.12);
+}
+.orbit-icon-emoji {
+  line-height: 1;
+  user-select: none;
+}
+
+/* Floating content cards */
+.feature-card-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0.15;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.orbit-node--active .feature-card-content {
+  opacity: 1;
+}
+
+.feature-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F2B66;
+  letter-spacing: -0.01em;
+}
+
+.feature-card__desc {
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748B;
+  margin: 2px 0 0 0;
+  white-space: normal;
+  width: 160px;
+  line-height: 1.4;
+}
+
+/* Precision spatial overrides – increased offset to avoid clipping */
+.label-dir--right {
+  left: 76px;
+  text-align: left;
+  align-items: flex-start;
+}
+
+.label-dir--left {
+  right: 76px;
+  text-align: right;
+  align-items: flex-end;
+}
+
+/* ── Responsive fallbacks ─────────────────────────── */
+@media (max-width: 1279px) and (min-width: 1024px) {
+  .hero-headline { font-size: 48px; }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .hero-grid { flex-direction: column; padding: 0 5%; }
+  .hero-left { max-width: 100%; text-align: center; align-items: center; }
+  .hero-right { position: relative; right: auto; top: auto; transform: none; margin: 0 auto; }
+  .orbit-workspace { transform: scale(0.7); }
+}
+
+@media (max-width: 767px) {
+  .hero-wrapper { height: auto; }
+  .hero-inner { position: relative; height: auto; min-height: 100svh; }
+  .hero-grid { flex-direction: column; gap: 32px; }
+  .hero-left { max-width: 100%; }
+  .hero-right { display: none; }
+}
